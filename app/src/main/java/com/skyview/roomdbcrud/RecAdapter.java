@@ -14,17 +14,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.skyview.roomdbcrud.roomdb.ContryModel;
-import com.skyview.roomdbcrud.roomdb.ContryViewModel;
+import com.skyview.roomdbcrud.roomdb.UserInfo;
+import com.skyview.roomdbcrud.roomdb.UserViewModel;
 
 import java.util.List;
 
 public class RecAdapter extends RecyclerView.Adapter<RecAdapter.MyViewHolder>{
-    List<ContryModel> mylist;
+    List<UserInfo> mylist;
     Application context;
     Context context1;
     Dialog dialog;
-    public RecAdapter(Application context,List<ContryModel> mylist,Dialog dialog) {
+    public RecAdapter(Application context, List<UserInfo> mylist, Dialog dialog) {
         this.mylist=mylist;
         this.context = context;
         this.dialog=dialog;
@@ -40,15 +40,15 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.MyViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull @org.jetbrains.annotations.NotNull RecAdapter.MyViewHolder holder, int position) {
 
-            ContryModel model1=mylist.get(position);
+            UserInfo model1=mylist.get(position);
             holder.textView.setText(model1.getName());
             context1=holder.itemView.getContext();
             holder.deleteBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ContryModel model=new ContryModel(mylist.get(holder.getAdapterPosition()).getName());
+                    UserInfo model=new UserInfo(mylist.get(holder.getAdapterPosition()).getName());
                     model.setId(mylist.get(holder.getAdapterPosition()).getId());
-                    ContryViewModel viewModel=new ContryViewModel(context);
+                    UserViewModel viewModel=new UserViewModel(context);
                     viewModel.delete(model);
 
                 }
@@ -81,22 +81,22 @@ public class RecAdapter extends RecyclerView.Adapter<RecAdapter.MyViewHolder>{
         }
     }
 
-    public void setContry(List<ContryModel> list){
+    public void setContry(List<UserInfo> list){
         mylist=list;
 
     }
-    private void showPOPUpforUpdate(int position,List<ContryModel> mylist1) {
+    private void showPOPUpforUpdate(int position,List<UserInfo> mylist1) {
         dialog.show();
-        EditText editText=dialog.findViewById(R.id.editText);
+        EditText editText=dialog.findViewById(R.id.name);
         editText.setText(mylist1.get(position).getName().toString());
         dialog.findViewById(R.id.saveBtn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
               String s=editText.getText().toString().trim();
               if(!s.isEmpty()){
-                  ContryModel model=new ContryModel(s);
+                  UserInfo model=new UserInfo(s);
                   model.setId(mylist.get(position).getId());
-                  ContryViewModel viewModel=new ContryViewModel(context);
+                  UserViewModel viewModel=new UserViewModel(context);
                   viewModel.insert(model);
                   dialog.dismiss();
                   Toast.makeText(context, "Data updated", Toast.LENGTH_SHORT).show();

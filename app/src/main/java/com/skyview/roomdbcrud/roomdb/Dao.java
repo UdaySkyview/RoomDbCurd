@@ -12,18 +12,18 @@ import java.util.List;
 @androidx.room.Dao
 public interface Dao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(ContryModel contryModel);
+    void insert(UserInfo userInfo);
 
     @Update
-    void update(ContryModel contryModel);
+    void update(UserInfo userInfo);
 
     @Delete
-    void delete(ContryModel contryModel);
+    void delete(UserInfo userInfo);
 
-    @Query("SELECT * FROM contry_name")
-    public LiveData<List<ContryModel>> getAllContry();
+    @Query("SELECT * FROM user_info")
+    LiveData<List<UserInfo>> getAllUserInfo();
 
-    @Query("DELETE FROM contry_name")
+    @Query("DELETE FROM user_info")
     void deleteAll();
 
 }
