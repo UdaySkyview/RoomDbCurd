@@ -26,4 +26,7 @@ public interface Dao {
     @Query("DELETE FROM user_info")
     void deleteAll();
 
+    @Query("SELECT * FROM user_info")
+    List<UserInfo> getAllUserList();
+
 }

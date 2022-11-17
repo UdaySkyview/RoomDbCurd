@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class UserRepository {
     private final Dao dao;
@@ -36,6 +37,21 @@ public class UserRepository {
     public LiveData<List<UserInfo>> getAllUsers() {
         return listLiveData;
     }
+
+    public List<UserInfo> getAllUsersList() {
+        return dao.getAllUserList();
+    }
+
+
+    /*private  static class GetAllUserList extends  AsyncTask<Void,Void,List<UserInfo>>{
+        private final Dao dao;
+        public GetAllUserList(Dao dao){this.dao = dao;}
+
+        @Override
+        protected List<UserInfo> doInBackground(Void... voids) {
+            return dao.getAllUserList();
+        }
+    }*/
 
     private static class InsertUser extends AsyncTask<UserInfo, Void, Void> {
         public InsertUser(Dao dao) {

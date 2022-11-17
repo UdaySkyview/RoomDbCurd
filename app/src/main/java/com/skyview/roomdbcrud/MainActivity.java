@@ -2,6 +2,7 @@ package com.skyview.roomdbcrud;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,9 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -24,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static androidx.recyclerview.widget.ItemTouchHelper.*;
 
@@ -31,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     FloatingActionButton fab;
     List<UserInfo> allContry = new ArrayList<>();
+    List<UserInfo> users = new ArrayList<>();
     Dialog dialog;
     UserViewModel viewModel;
     RecAdapter adapter;
@@ -71,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         };
         viewModel = new UserViewModel(getApplication());
         viewModel.getListLiveData().observe(MainActivity.this, userObs);
-
+        users = viewModel.getUsersListData();
         fab.setOnClickListener(v -> showPOPUp());
         new ItemTouchHelper(new SimpleCallback(ItemTouchHelper.LEFT, ItemTouchHelper.RIGHT) {
             @Override
@@ -173,5 +180,30 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menus, menu);
+        MenuItem searchViewItem = menu.findItem(R.id.app_bar_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchViewItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                searchView.clearFocus();
+                allContry.clear();
+                for (int i = 0; i<users.size();i++){
+                    if(users.get(i).getName().toLowerCase(Locale.ROOT).contains(s.toLowerCase(Locale.ROOT))){
+                        allContry.add(users.get(i));
+                    }
+                }
+                return false;
+            }
 
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
 }
